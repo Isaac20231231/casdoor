@@ -265,6 +265,8 @@ type Userinfo struct {
 	Phone         string   `json:"phone,omitempty"`
 	RealName      string   `json:"real_name,omitempty"`
 	IsVerified    bool     `json:"is_verified,omitempty"`
+	IdCard        string   `json:"id_card,omitempty"`
+	ExternalId    string   `json:"external_id,omitempty"`
 	Groups        []string `json:"groups,omitempty"`
 	Roles         []string `json:"roles,omitempty"`
 	Permissions   []string `json:"permissions,omitempty"`
@@ -1386,6 +1388,13 @@ func GetUserInfo(user *User, scope string, aud string, host string) (*Userinfo, 
 		}
 		if allowed("IsVerified") {
 			resp.IsVerified = user.IsVerified
+		}
+		// Downstream systems identify employees by these (employee number and the upstream HR system's user id).
+		if allowed("IdCard") {
+			resp.IdCard = user.IdCard
+		}
+		if allowed("ExternalId") {
+			resp.ExternalId = user.ExternalId
 		}
 	}
 
